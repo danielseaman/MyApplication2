@@ -65,17 +65,9 @@ public class GPSTracker extends Service implements LocationListener {
         getLocation();
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-
-    }
-
+    /**
+     * Try to get my current location by GPS or Network Provider
+     */
     public void getLocation() {
 
         try {
@@ -117,16 +109,6 @@ public class GPSTracker extends Service implements LocationListener {
 
             // Application can use GPS or Network Provider
             if (!provider_info.isEmpty()) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
                 locationManager.requestLocationUpdates(provider_info, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
                 if (locationManager != null) {
@@ -141,12 +123,21 @@ public class GPSTracker extends Service implements LocationListener {
             Log.e(TAG, "Impossible to connect to LocationManager", e);
         }
     }
+
+    /**
+     * Update GPSTracker latitude and longitude
+     */
     public void updateGPSCoordinates() {
         if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
         }
     }
+
+    /**
+     * GPSTracker latitude getter and setter
+     * @return latitude
+     */
     public double getLatitude() {
         if (location != null) {
             latitude = location.getLatitude();
@@ -166,10 +157,34 @@ public class GPSTracker extends Service implements LocationListener {
 
         return longitude;
     }
+
+    /**
+     * GPSTracker isGPSTrackingEnabled getter.
+     * Check GPS/wifi is enabled
+     */
     public boolean getIsGPSTrackingEnabled() {
 
         return this.isGPSTrackingEnabled;
     }
+
+    /**
+     * Stop using GPS listener
+     * Calling this method will stop using GPS in your app
+     */
+    public void stopUsingGPS() {
+        if (locationManager != null) {
+            locationManager.removeUpdates(GPSTracker.this);
+        }
+    }
+
+    /**
+     * Function to show settings alert dialog
+     */
+
+    /**
+     * Get list of address by latitude and longitude
+     * @return null or List<Address>
+     */
     public List<Address> getGeocoderAddress(Context context) {
         if (location != null) {
 
@@ -191,6 +206,11 @@ public class GPSTracker extends Service implements LocationListener {
 
         return null;
     }
+
+    /**
+     * Try to get AddressLine
+     * @return null or addressLine
+     */
     public String getAddressLine(Context context) {
         List<Address> addresses = getGeocoderAddress(context);
 
@@ -203,5 +223,78 @@ public class GPSTracker extends Service implements LocationListener {
             return null;
         }
     }
+
+    /**
+     * Try to get Locality
+     * @return null or locality
+     */
+    public String getLocality(Context context) {
+        List<Address> addresses = getGeocoderAddress(context);
+
+        if (addresses != null && addresses.size() > 0) {
+            Address address = addresses.get(0);
+            String locality = address.getLocality();
+
+            return locality;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Try to get Postal Code
+     * @return null or postalCode
+     */
+    public String getPostalCode(Context context) {
+        List<Address> addresses = getGeocoderAddress(context);
+
+        if (addresses != null && addresses.size() > 0) {
+            Address address = addresses.get(0);
+            String postalCode = address.getPostalCode();
+
+            return postalCode;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Try to get CountryName
+     * @return null or postalCode
+     */
+    public String getCountryName(Context context) {
+        List<Address> addresses = getGeocoderAddress(context);
+        if (addresses != null && addresses.size() > 0) {
+            Address address = addresses.get(0);
+            String countryName = address.getCountryName();
+
+            return countryName;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
 
 }
