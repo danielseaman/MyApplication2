@@ -48,11 +48,24 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        System.out.println(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+                requestQueue.add(jsonObjectRequest);
             }
         });
 
     }
-    public void volleyPost(){
+   /* public void volleyPost(){
         GPSTracker gpsTracker = new GPSTracker(this);
         String postUrl = "https://reqres.in/api/users";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -71,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-/*
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -84,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        requestQueue.add(jsonObjectRequest);*/
+        requestQueue.add(jsonObjectRequest);
 
-    }
+    }*/
 }
