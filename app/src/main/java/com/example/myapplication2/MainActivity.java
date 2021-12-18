@@ -17,6 +17,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
     TextView textView;
     @Override
@@ -31,36 +33,42 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //volleyPost();
 
-                String postUrl = "https://reqres.in/api/users";
+//                String uri = "http://osgi.osgiexample.net"
 
+                String ID = "ABC123";
+                int speed = new Random().nextInt(171)+10;
                 String stringLatitude = String.valueOf(gpsTracker.latitude);
-
-
-
                 String stringLongitude = String.valueOf(gpsTracker.longitude);
+                int heading = new Random().nextInt(51)+40;
 
-                textView.setText(stringLatitude+" "+stringLongitude);
-                JSONObject postData = new JSONObject();
-                try {
-                    postData.put("lat", stringLatitude);
-                    postData.put("long", stringLongitude);
+                String postUrl = String.format("http://osgi.osgiexample.net/toast/emergency?id=%1$s&speed=%2$s&longitude=%3$s&latitude=%4$s&heading=%5$s",
+                        ID,speed,stringLatitude,stringLongitude,heading);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        System.out.println(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                });
 
-                requestQueue.add(jsonObjectRequest);
+//                textView.setText(stringLatitude+" "+stringLongitude);
+                textView.setText(postUrl);
+
+//                JSONObject postData = new JSONObject();
+//                try {
+//                    postData.put("lat", stringLatitude);
+//                    postData.put("long", stringLongitude);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        System.out.println(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        error.printStackTrace();
+//                    }
+//                });
+//
+//                requestQueue.add(jsonObjectRequest);
             }
         });
 
