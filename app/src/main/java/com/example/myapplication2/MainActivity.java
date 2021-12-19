@@ -43,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
                 String stringLongitude = String.valueOf((int)gpsTracker.longitude*100000);
                 int heading = new Random().nextInt(51)+40;
 
-                String postUrl = String.format("https://osgi.osgiexample.net:8080/toast/emergency?id=%1$s&speed=%2$s&longitude=%3$s&latitude=%4$s&heading=%5$s",
+//                String postUrl = String.format("https://osgi.osgiexample.net:8080/toast/emergency?id=%1$s&speed=%2$s&longitude=%3$s&latitude=%4$s&heading=%5$s",
+//                        ID,speed,stringLatitude,stringLongitude,heading);
+
+                String postUrl = String.format("https://192.168.1.20:8080/toast/emergency?id=%1$s&speed=%2$s&longitude=%3$s&latitude=%4$s&heading=%5$s",
                         ID,speed,stringLatitude,stringLongitude,heading);
 
                 System.out.println(postUrl);
